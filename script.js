@@ -48,8 +48,38 @@ const stores = [
   }
 ];
 
+const themeContent = {
+  gaming: {
+    buttonLabel: "Mode nature",
+    image: "hero-bg.png",
+    eyebrow: "ENERGY / CYBER / PREMIUM",
+    systemLine: "SYSTEM ONLINE // GL1TCH MODE ACTIVATED",
+    subtitle: "Boost plus propre. Focus plus stable. Style plus premium.",
+    focus: "Stable",
+    taste: "Cyber Lime"
+  },
+  nature: {
+    buttonLabel: "Mode gaming",
+    image: "hero-bg-nature.png",
+    eyebrow: "NATURE / CLEAN / FRESH",
+    systemLine: "NATURAL FLOW // GL1TCH GREEN MODE",
+    subtitle: "Fraîcheur naturelle. Énergie maîtrisée. Sensation plus pure.",
+    focus: "Équilibré",
+    taste: "Fresh Lime"
+  }
+};
+
 let cart = [];
 let selectedStoreId = stores[0].id;
+let currentTheme = localStorage.getItem("gl1tch-theme") || "gaming";
+
+const themeToggle = document.getElementById("themeToggle");
+const heroThemeImage = document.getElementById("heroThemeImage");
+const heroEyebrow = document.getElementById("heroEyebrow");
+const heroSystemLine = document.getElementById("heroSystemLine");
+const heroSubtitle = document.getElementById("heroSubtitle");
+const featureFocus = document.getElementById("featureFocus");
+const featureTaste = document.getElementById("featureTaste");
 
 const dyslexicToggle = document.getElementById("dyslexicToggle");
 
@@ -85,6 +115,29 @@ const cartBackdrop = document.getElementById("cartBackdrop");
 const cartItemsContainer = document.getElementById("cartItems");
 const cartCount = document.getElementById("cartCount");
 const cartTotal = document.getElementById("cartTotal");
+
+function applyTheme(theme) {
+  const selectedTheme = themeContent[theme];
+  if (!selectedTheme) return;
+
+  currentTheme = theme;
+
+  document.body.classList.toggle("theme-nature", theme === "nature");
+  themeToggle.textContent = selectedTheme.buttonLabel;
+  heroThemeImage.src = selectedTheme.image;
+  heroEyebrow.textContent = selectedTheme.eyebrow;
+  heroSystemLine.textContent = selectedTheme.systemLine;
+  heroSubtitle.textContent = selectedTheme.subtitle;
+  featureFocus.textContent = selectedTheme.focus;
+  featureTaste.textContent = selectedTheme.taste;
+
+  localStorage.setItem("gl1tch-theme", theme);
+}
+
+function toggleTheme() {
+  const nextTheme = currentTheme === "gaming" ? "nature" : "gaming";
+  applyTheme(nextTheme);
+}
 
 function formatPrice(value) {
   return value.toFixed(2).replace(".", ",") + "€";
@@ -346,6 +399,8 @@ async function calculateRoute() {
   }
 }
 
+themeToggle.addEventListener("click", toggleTheme);
+
 dyslexicToggle.addEventListener("click", () => {
   document.body.classList.toggle("dyslexic-mode");
 });
@@ -394,5 +449,6 @@ window.decreaseQuantity = decreaseQuantity;
 window.removeItem = removeItem;
 window.selectStore = selectStore;
 
+applyTheme(currentTheme);
 renderCart();
 renderStores();
