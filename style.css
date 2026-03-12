@@ -233,16 +233,17 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(1.05) brightness(0.55) blur(0.5px);
-  transform: scale(1.04);
+  filter: saturate(1.08) brightness(0.5) contrast(1.05) blur(0.3px);
+  transform: scale(1.05);
 }
 
 .hero-title-overlay {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(4, 6, 12, 0.86) 0%, rgba(5, 7, 13, 0.74) 38%, rgba(8, 10, 18, 0.54) 68%, rgba(8, 10, 18, 0.70) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.36) 100%);
+    linear-gradient(90deg, rgba(3, 5, 10, 0.88) 0%, rgba(4, 6, 12, 0.72) 36%, rgba(8, 10, 18, 0.48) 70%, rgba(8, 10, 18, 0.70) 100%),
+    radial-gradient(circle at 18% 35%, rgba(255, 0, 98, 0.18), transparent 28%),
+    radial-gradient(circle at 34% 58%, rgba(0, 229, 255, 0.12), transparent 24%);
 }
 
 .hero-title-noise {
@@ -275,27 +276,46 @@ a {
 }
 
 .eyebrow {
-  color: #c3ccd8;
+  color: #d9e4ef;
   text-transform: uppercase;
   letter-spacing: 0.28em;
   font-size: 0.8rem;
-  margin: 0 0 18px;
+  margin: 0 0 14px;
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.18);
+}
+
+.title-stack {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.title-system-line {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(214, 229, 243, 0.9);
+  text-shadow: 0 0 10px rgba(255, 79, 216, 0.24);
 }
 
 .glitch-title {
   position: relative;
   display: inline-block;
   margin: 0;
-  font-size: clamp(4rem, 10vw, 7rem);
-  line-height: 0.92;
-  font-weight: 900;
-  letter-spacing: 0.04em;
+  font-size: clamp(4.6rem, 11vw, 8.2rem);
+  line-height: 0.88;
+  font-weight: 1000;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #ffffff;
   text-shadow:
-    2px 0 var(--cyan),
-    -2px 0 var(--pink),
-    0 0 24px rgba(255,255,255,0.10);
+    0 0 8px rgba(255,255,255,0.6),
+    0 0 18px rgba(255,255,255,0.25),
+    3px 0 0 rgba(0, 229, 255, 0.9),
+    -3px 0 0 rgba(255, 79, 216, 0.75),
+    0 0 30px rgba(255, 79, 216, 0.18),
+    0 0 40px rgba(0, 229, 255, 0.16);
 }
 
 .glitch-title::before,
@@ -307,17 +327,28 @@ a {
 }
 
 .glitch-title::before {
-  transform: translate(-2px, 1px);
-  color: var(--cyan);
-  opacity: 0.7;
-  clip-path: inset(0 0 45% 0);
+  color: rgba(0, 229, 255, 0.95);
+  transform: translate(-4px, 1px);
+  clip-path: inset(0 0 48% 0);
+  text-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
 }
 
 .glitch-title::after {
-  transform: translate(2px, -1px);
-  color: var(--pink);
-  opacity: 0.7;
-  clip-path: inset(55% 0 0 0);
+  color: rgba(255, 79, 216, 0.95);
+  transform: translate(4px, -1px);
+  clip-path: inset(52% 0 0 0);
+  text-shadow: 0 0 16px rgba(255, 79, 216, 0.35);
+}
+
+.title-energy-line {
+  width: min(360px, 70%);
+  height: 4px;
+  margin-top: 16px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 79, 216, 0.9), rgba(0, 229, 255, 0.9), rgba(255,255,255,0.75));
+  box-shadow:
+    0 0 10px rgba(255, 79, 216, 0.35),
+    0 0 18px rgba(0, 229, 255, 0.25);
 }
 
 .subtitle {
@@ -539,7 +570,6 @@ a {
   line-height: 1.7;
 }
 
-/* HEALTH MODAL */
 .health-intro {
   color: #c6ced9;
   margin-top: -6px;
@@ -864,7 +894,6 @@ a {
   line-height: 1.6;
 }
 
-/* STORE */
 .route-box {
   margin-bottom: 18px;
   padding: 18px;
@@ -1027,7 +1056,6 @@ a {
   padding: 8px 4px;
 }
 
-/* CART */
 .cart-panel {
   position: fixed;
   top: 0;
@@ -1270,16 +1298,21 @@ a {
   }
 
   .hero-title-panel {
-    min-height: 520px;
+    min-height: 540px;
   }
 
   .hero-title-content {
-    min-height: 520px;
+    min-height: 540px;
     padding: 28px;
   }
 
+  .title-system-line {
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+
   .glitch-title {
-    font-size: 3.5rem;
+    font-size: 3.9rem;
   }
 
   .btn {
