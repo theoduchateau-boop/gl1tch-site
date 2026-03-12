@@ -35,19 +35,20 @@
       <h1 class="glitch-title" data-text="GL1TCH">GL1TCH</h1>
 
       <p class="subtitle">
-        BOOST THE SYSTEM — Cyber Lime / Tropical
+        Boost plus propre. Focus plus stable. Style plus premium.
       </p>
 
       <div class="hero-buttons">
         <button id="buyNowBtn" class="btn btn-primary">Acheter — 2,99€</button>
         <button id="openDetailsBtn" class="btn btn-secondary">Voir les détails</button>
         <button id="openStoreBtn" class="btn btn-secondary">Trouver en magasin</button>
+        <button id="openHealthBtn" class="btn btn-secondary">La santé et GL1TCH (Comparateur)</button>
       </div>
 
       <div class="feature-cards">
         <div class="feature-card">
           <span class="feature-label">Focus</span>
-          <strong>Max</strong>
+          <strong>Stable</strong>
         </div>
         <div class="feature-card">
           <span class="feature-label">Goût</span>
@@ -113,6 +114,154 @@
             une boisson moderne, dynamique et tournée vers la nouvelle génération.
           </p>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup santé / comparateur -->
+  <div id="healthModal" class="modal hidden">
+    <div class="modal-overlay" id="closeHealthOverlay"></div>
+
+    <div class="modal-content modal-health">
+      <button id="closeHealthBtn" class="modal-close">✕</button>
+
+      <p class="modal-kicker">Comparateur santé</p>
+      <h2>La santé et GL1TCH</h2>
+      <p class="health-intro">
+        Une lecture simple de ce que propose GL1TCH face à une boisson énergisante classique plus riche en sucre et plus agressive en stimulation.
+      </p>
+
+      <div class="health-banner">
+        <div class="health-badge">Comparateur indicatif</div>
+        <p>
+          GL1TCH est présenté ici comme une formule inventée, plus modérée et plus équilibrée dans sa composition.
+        </p>
+      </div>
+
+      <div class="compare-cards">
+        <article class="compare-card compare-card-gl1tch">
+          <div class="compare-top">
+            <span class="compare-tag compare-tag-green">GL1TCH</span>
+            <h3>Formule clean imaginée</h3>
+          </div>
+
+          <ul class="compare-list">
+            <li><span>Base</span><strong>Eau + électrolytes</strong></li>
+            <li><span>Énergie</span><strong>80 mg caféine thé vert</strong></li>
+            <li><span>Sucres ajoutés</span><strong>0 g</strong></li>
+            <li><span>Support</span><strong>Vit. B6, B12, magnésium</strong></li>
+            <li><span>Arômes</span><strong>Citron vert / tropical</strong></li>
+            <li><span>Positionnement</span><strong>Focus stable</strong></li>
+          </ul>
+        </article>
+
+        <article class="compare-card compare-card-market">
+          <div class="compare-top">
+            <span class="compare-tag compare-tag-red">Marché classique</span>
+            <h3>Boisson énergisante standard</h3>
+          </div>
+
+          <ul class="compare-list">
+            <li><span>Base</span><strong>Boisson sucrée stimulante</strong></li>
+            <li><span>Énergie</span><strong>Caféine souvent plus élevée</strong></li>
+            <li><span>Sucres ajoutés</span><strong>Souvent élevés</strong></li>
+            <li><span>Support</span><strong>Accent sur le “boost” rapide</strong></li>
+            <li><span>Ressenti</span><strong>Pic plus brutal</strong></li>
+            <li><span>Positionnement</span><strong>Énergie immédiate</strong></li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="body-section">
+        <div class="body-card body-card-red">
+          <div class="body-card-header">
+            <span class="body-pill body-pill-red">Boisson classique</span>
+            <h3>Ce qui peut être moins favorable</h3>
+          </div>
+
+          <div class="body-visual-row">
+            <div class="human human-red">
+              <div class="human-head"></div>
+              <div class="human-torso"></div>
+              <div class="human-arm arm-left"></div>
+              <div class="human-arm arm-right"></div>
+              <div class="human-leg leg-left"></div>
+              <div class="human-leg leg-right"></div>
+
+              <span class="hotspot hotspot-head"></span>
+              <span class="hotspot hotspot-heart"></span>
+              <span class="hotspot hotspot-stomach"></span>
+              <span class="hotspot hotspot-energy"></span>
+            </div>
+
+            <div class="body-explain">
+              <div class="body-item">
+                <h4>Tête / sommeil</h4>
+                <p>Trop de caféine peut favoriser nervosité, agitation et sommeil moins bon.</p>
+              </div>
+              <div class="body-item">
+                <h4>Dents / sucre</h4>
+                <p>Les boissons sucrées fréquentes sont moins favorables pour les dents.</p>
+              </div>
+              <div class="body-item">
+                <h4>Ventre</h4>
+                <p>Les formules très agressives peuvent être moins confortables selon les personnes.</p>
+              </div>
+              <div class="body-item">
+                <h4>Énergie</h4>
+                <p>Le ressenti peut être plus brutal, avec un pic rapide puis une retombée.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="body-card body-card-green">
+          <div class="body-card-header">
+            <span class="body-pill body-pill-green">GL1TCH</span>
+            <h3>Ce qu’on met en avant</h3>
+          </div>
+
+          <div class="body-visual-row">
+            <div class="human human-green">
+              <div class="human-head"></div>
+              <div class="human-torso"></div>
+              <div class="human-arm arm-left"></div>
+              <div class="human-arm arm-right"></div>
+              <div class="human-leg leg-left"></div>
+              <div class="human-leg leg-right"></div>
+
+              <span class="hotspot hotspot-head"></span>
+              <span class="hotspot hotspot-heart"></span>
+              <span class="hotspot hotspot-stomach"></span>
+              <span class="hotspot hotspot-energy"></span>
+            </div>
+
+            <div class="body-explain">
+              <div class="body-item">
+                <h4>Tête / focus</h4>
+                <p>Caféine plus modérée pour une stimulation perçue comme plus maîtrisée.</p>
+              </div>
+              <div class="body-item">
+                <h4>Dents / sucre</h4>
+                <p>Sans sucres ajoutés dans cette version imaginée, donc positionnement plus clean.</p>
+              </div>
+              <div class="body-item">
+                <h4>Ventre</h4>
+                <p>Formule visuellement pensée pour être plus légère et plus simple à lire.</p>
+              </div>
+              <div class="body-item">
+                <h4>Énergie</h4>
+                <p>Objectif : focus plus stable, hydratation mieux mise en avant et image premium.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="health-note">
+        <p>
+          GL1TCH présenté ici : eau, électrolytes, extrait de thé vert, caféine modérée, vitamines B, magnésium, arômes naturels.
+        </p>
       </div>
     </div>
   </div>

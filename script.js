@@ -60,6 +60,11 @@ const detailsModal = document.getElementById("detailsModal");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const closeModalOverlay = document.getElementById("closeModalOverlay");
 
+const openHealthBtn = document.getElementById("openHealthBtn");
+const healthModal = document.getElementById("healthModal");
+const closeHealthBtn = document.getElementById("closeHealthBtn");
+const closeHealthOverlay = document.getElementById("closeHealthOverlay");
+
 const openStoreBtn = document.getElementById("openStoreBtn");
 const storeModal = document.getElementById("storeModal");
 const closeStoreBtn = document.getElementById("closeStoreBtn");
@@ -85,38 +90,52 @@ function formatPrice(value) {
   return value.toFixed(2).replace(".", ",") + "€";
 }
 
+function setBodyLock(isLocked) {
+  document.body.style.overflow = isLocked ? "hidden" : "";
+}
+
 function openModal() {
   detailsModal.classList.remove("hidden");
-  document.body.style.overflow = "hidden";
+  setBodyLock(true);
 }
 
 function closeModal() {
   detailsModal.classList.add("hidden");
-  document.body.style.overflow = "";
+  setBodyLock(false);
+}
+
+function openHealthModal() {
+  healthModal.classList.remove("hidden");
+  setBodyLock(true);
+}
+
+function closeHealthModal() {
+  healthModal.classList.add("hidden");
+  setBodyLock(false);
 }
 
 function openStoreModal() {
   storeModal.classList.remove("hidden");
-  document.body.style.overflow = "hidden";
+  setBodyLock(true);
   renderStores(citySearch.value);
 }
 
 function closeStoreModal() {
   storeModal.classList.add("hidden");
-  document.body.style.overflow = "";
+  setBodyLock(false);
   routeStatus.textContent = "";
 }
 
 function openCart() {
   cartPanel.classList.add("open");
   cartBackdrop.classList.add("show");
-  document.body.style.overflow = "hidden";
+  setBodyLock(true);
 }
 
 function closeCart() {
   cartPanel.classList.remove("open");
   cartBackdrop.classList.remove("show");
-  document.body.style.overflow = "";
+  setBodyLock(false);
 }
 
 function addToCart() {
@@ -298,8 +317,7 @@ async function geocodeAddress(address) {
 
   return {
     lat: parseFloat(data[0].lat),
-    lon: parseFloat(data[0].lon),
-    label: data[0].display_name
+    lon: parseFloat(data[0].lon)
   };
 }
 
@@ -336,6 +354,10 @@ openDetailsBtn.addEventListener("click", openModal);
 closeModalBtn.addEventListener("click", closeModal);
 closeModalOverlay.addEventListener("click", closeModal);
 
+openHealthBtn.addEventListener("click", openHealthModal);
+closeHealthBtn.addEventListener("click", closeHealthModal);
+closeHealthOverlay.addEventListener("click", closeHealthModal);
+
 openStoreBtn.addEventListener("click", openStoreModal);
 closeStoreBtn.addEventListener("click", closeStoreModal);
 closeStoreOverlay.addEventListener("click", closeStoreModal);
@@ -361,6 +383,7 @@ cartBackdrop.addEventListener("click", closeCart);
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     closeModal();
+    closeHealthModal();
     closeStoreModal();
     closeCart();
   }
