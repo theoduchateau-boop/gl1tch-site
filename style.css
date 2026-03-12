@@ -214,8 +214,68 @@ a {
   animation: fadeUp 0.8s ease;
 }
 
+.hero-title-panel {
+  position: relative;
+  min-height: 480px;
+  border-radius: 32px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: var(--shadow);
+  background: rgba(6, 8, 14, 0.45);
+}
+
+.hero-title-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-title-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.05) brightness(0.55) blur(0.5px);
+  transform: scale(1.04);
+}
+
+.hero-title-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(4, 6, 12, 0.86) 0%, rgba(5, 7, 13, 0.74) 38%, rgba(8, 10, 18, 0.54) 68%, rgba(8, 10, 18, 0.70) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.36) 100%);
+}
+
+.hero-title-noise {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(255, 0, 102, 0.08), transparent 35%),
+    linear-gradient(315deg, rgba(0, 229, 255, 0.07), transparent 35%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.hero-title-panel::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 120px;
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 6, 10, 0.85) 100%);
+  pointer-events: none;
+}
+
+.hero-title-content {
+  position: relative;
+  z-index: 1;
+  padding: 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 480px;
+}
+
 .eyebrow {
-  color: #9aa3b2;
+  color: #c3ccd8;
   text-transform: uppercase;
   letter-spacing: 0.28em;
   font-size: 0.8rem;
@@ -234,7 +294,8 @@ a {
   color: #ffffff;
   text-shadow:
     2px 0 var(--cyan),
-    -2px 0 var(--pink);
+    -2px 0 var(--pink),
+    0 0 24px rgba(255,255,255,0.10);
 }
 
 .glitch-title::before,
@@ -261,15 +322,17 @@ a {
 
 .subtitle {
   margin: 18px 0 0;
+  max-width: 620px;
   font-size: clamp(1.1rem, 2vw, 1.5rem);
-  color: #d6dbe5;
+  color: #eef2f7;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
 }
 
 .hero-buttons {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  margin: 30px 0;
+  margin: 30px 0 0;
 }
 
 .btn {
@@ -1204,6 +1267,15 @@ a {
 
   .hero {
     width: min(100% - 24px, 1200px);
+  }
+
+  .hero-title-panel {
+    min-height: 520px;
+  }
+
+  .hero-title-content {
+    min-height: 520px;
+    padding: 28px;
   }
 
   .glitch-title {
