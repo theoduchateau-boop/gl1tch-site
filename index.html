@@ -3,85 +3,171 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GL1TCH</title>
-  <link rel="stylesheet" href="./style.css" />
+  <title>GL1TCH - Focus Drink</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="font-normal">
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="scanlines"></div>
 
-  <header class="hero">
-    <div class="bg-glitch"></div>
-    <div class="bg-overlay"></div>
-
-    <div class="hero-top">
-      <div class="mini-brand">
-        <span class="bolt">⚡</span>
-        <span>FOCUS DRINK</span>
-      </div>
-
-      <div class="top-right">
-        <span class="badge">500ml</span>
-        <span class="badge">150mg caféine</span>
-        <button id="dys" class="btn btn-secondary">Mode dyslexique</button>
-      </div>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-text">FOCUS DRINK</span>
     </div>
 
-    <div class="hero-grid">
-      <div class="hero-left">
-        <h1 class="glitch" data-text="GL1TCH">GL1TCH</h1>
-
-        <p class="subtitle">
-          BOOST THE SYSTEM — Cyber Lime / Tropical
-        </p>
-
-        <div class="cta-row">
-          <button class="btn btn-primary">Acheter — 2,99€</button>
-          <button class="btn btn-secondary">Voir les détails</button>
-        </div>
-
-        <div class="info-grid">
-          <div class="panel small-card">
-            <span class="small-label">Focus</span>
-            <strong>Max</strong>
-          </div>
-
-          <div class="panel small-card">
-            <span class="small-label">Goût</span>
-            <strong>Cyber Lime</strong>
-          </div>
-
-          <div class="panel small-card">
-            <span class="small-label">Format</span>
-            <strong>500ml</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="panel can-card">
-          <img src="./Cannette.PNG" alt="Canette GL1TCH" class="can-image" />
-        </div>
-      </div>
+    <div class="top-actions">
+      <div class="pill">500ml</div>
+      <div class="pill">150mg caféine</div>
+      <button id="dyslexicToggle" class="pill button-pill">Mode dyslexique</button>
+      <button id="cartToggle" class="cart-btn">
+        Panier
+        <span id="cartCount" class="cart-count">0</span>
+      </button>
     </div>
   </header>
 
-  <section class="section-wrap">
-    <div class="panel why-card">
-      <h2>Pourquoi GL1TCH ?</h2>
-      <p>
-        Une boisson pensée pour les longues sessions : travail, gaming, concentration.
-        Un goût propre, une identité cyber et un boost net.
+  <main class="hero">
+    <section class="hero-left">
+      <p class="eyebrow">ENERGY / CYBER / PREMIUM</p>
+
+      <h1 class="glitch-title" data-text="GL1TCH">GL1TCH</h1>
+
+      <p class="subtitle">
+        BOOST THE SYSTEM — Cyber Lime / Tropical
       </p>
 
-      <div class="tags">
-        <span class="tag">Caféine</span>
-        <span class="tag">Taurine</span>
-        <span class="tag">Vitamines B</span>
-        <span class="tag">Citron vert</span>
-        <span class="tag">Extraits tropicaux</span>
+      <div class="hero-buttons">
+        <button id="buyNowBtn" class="btn btn-primary">Acheter — 2,99€</button>
+        <button id="openDetailsBtn" class="btn btn-secondary">Voir les détails</button>
       </div>
+
+      <div class="feature-cards">
+        <div class="feature-card">
+          <span class="feature-label">Focus</span>
+          <strong>Max</strong>
+        </div>
+        <div class="feature-card">
+          <span class="feature-label">Goût</span>
+          <strong>Cyber Lime</strong>
+        </div>
+        <div class="feature-card">
+          <span class="feature-label">Format</span>
+          <strong>500ml</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero-right">
+      <div class="can-card">
+        <div class="can-glow"></div>
+        <img src="Cannette.PNG" alt="Cannette GL1TCH" class="can-image" />
+      </div>
+    </section>
+  </main>
+
+  <section class="why-section">
+    <div class="section-header">
+      <p class="section-kicker">Pourquoi GL1TCH</p>
+      <h2>Une boisson pensée comme un produit gaming premium</h2>
+    </div>
+
+    <div class="why-grid">
+      <article class="why-card">
+        <h3>Identité forte</h3>
+        <p>
+          Une direction artistique sombre, glitchée et futuriste inspirée des univers gaming et cyber.
+        </p>
+      </article>
+
+      <article class="why-card">
+        <h3>Positionnement premium</h3>
+        <p>
+          Une seule canette, un goût signature, un branding fort et une présence visuelle immédiatement reconnaissable.
+        </p>
+      </article>
+
+      <article class="why-card">
+        <h3>Expérience immersive</h3>
+        <p>
+          Le site n’est pas juste une vitrine : il doit donner l’impression d’entrer dans une marque.
+        </p>
+      </article>
     </div>
   </section>
 
-  <script src="./script.js"></script>
+  <!-- Popup détails -->
+  <div id="detailsModal" class="modal hidden">
+    <div class="modal-overlay" id="closeModalOverlay"></div>
+
+    <div class="modal-content">
+      <button id="closeModalBtn" class="modal-close">✕</button>
+
+      <p class="modal-kicker">Détails produit</p>
+      <h2>GL1TCH — Cyber Lime / Tropical</h2>
+
+      <div class="modal-grid">
+        <div class="modal-block">
+          <h3>Description</h3>
+          <p>
+            GL1TCH est une boisson énergétique fictive au positionnement gaming / cyber / premium.
+            Son univers repose sur un design sombre, digital, agressif et propre à la fois.
+          </p>
+        </div>
+
+        <div class="modal-block">
+          <h3>Infos clés</h3>
+          <ul>
+            <li>Format : 500ml</li>
+            <li>Saveur : Cyber Lime / Tropical</li>
+            <li>Style : Focus Drink</li>
+            <li>Prix : 2,99€</li>
+          </ul>
+        </div>
+
+        <div class="modal-block">
+          <h3>Positionnement</h3>
+          <p>
+            Pensée pour les longues sessions, le streaming, le gaming nocturne et l’univers e-sport.
+          </p>
+        </div>
+
+        <div class="modal-block">
+          <h3>Note</h3>
+          <p>
+            Produit fictif créé dans le cadre d’un projet web vitrine en HTML / CSS / JavaScript.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panier -->
+  <aside id="cartPanel" class="cart-panel">
+    <div class="cart-header">
+      <h2>Panier</h2>
+      <button id="closeCartBtn" class="cart-close">✕</button>
+    </div>
+
+    <div class="cart-body">
+      <div id="cartItems" class="cart-items">
+        <p class="empty-cart">Ton panier est vide.</p>
+      </div>
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cartTotal">0,00€</strong>
+      </div>
+      <button class="btn btn-primary cart-checkout">Passer commande</button>
+    </div>
+  </aside>
+
+  <div id="cartBackdrop" class="cart-backdrop"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
