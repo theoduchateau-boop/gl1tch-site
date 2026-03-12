@@ -1,36 +1,87 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GL1TCH</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
-
 <body class="font-normal">
 
-<header class="hero">
+  <header class="hero">
+    <div class="bg-glitch"></div>
+    <div class="bg-overlay"></div>
 
-  <div class="bg-glitch"></div>
-  <div class="bg-overlay"></div>
+    <div class="hero-top">
+      <div class="mini-brand">
+        <span class="bolt">⚡</span>
+        <span>FOCUS DRINK</span>
+      </div>
 
-  <div class="content">
+      <div class="top-right">
+        <span class="badge">500ml</span>
+        <span class="badge">150mg caféine</span>
+        <button id="dys" class="btn btn-secondary">Mode dyslexique</button>
+      </div>
+    </div>
 
-    <h1 class="glitch" data-text="GL1TCH">GL1TCH</h1>
+    <div class="hero-grid">
+      <div class="hero-left">
+        <h1 class="glitch" data-text="GL1TCH">GL1TCH</h1>
 
-    <p>
-      BOOST THE SYSTEM — Cyber Lime / Tropical
-    </p>
+        <p class="subtitle">
+          BOOST THE SYSTEM — Cyber Lime / Tropical
+        </p>
 
-    <button id="dys">
-      Mode dyslexique
-    </button>
+        <div class="cta-row">
+          <button class="btn btn-primary">Acheter — 2,99€</button>
+          <button class="btn btn-secondary">Voir les détails</button>
+        </div>
 
-  </div>
+        <div class="info-grid">
+          <div class="panel small-card">
+            <span class="small-label">Focus</span>
+            <strong>Max</strong>
+          </div>
 
-</header>
+          <div class="panel small-card">
+            <span class="small-label">Goût</span>
+            <strong>Cyber Lime</strong>
+          </div>
 
-<script src="./script.js"></script>
+          <div class="panel small-card">
+            <span class="small-label">Format</span>
+            <strong>500ml</strong>
+          </div>
+        </div>
+      </div>
 
+      <div class="hero-right">
+        <div class="panel can-card">
+          <img src="./Cannette.PNG" alt="Canette GL1TCH" class="can-image" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section-wrap">
+    <div class="panel why-card">
+      <h2>Pourquoi GL1TCH ?</h2>
+      <p>
+        Une boisson pensée pour les longues sessions : travail, gaming, concentration.
+        Un goût propre, une identité cyber et un boost net.
+      </p>
+
+      <div class="tags">
+        <span class="tag">Caféine</span>
+        <span class="tag">Taurine</span>
+        <span class="tag">Vitamines B</span>
+        <span class="tag">Citron vert</span>
+        <span class="tag">Extraits tropicaux</span>
+      </div>
+    </div>
+  </section>
+
+  <script src="./script.js"></script>
 </body>
 </html>
