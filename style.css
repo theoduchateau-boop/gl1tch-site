@@ -1,4 +1,5 @@
 body {
+  margin: 0;
   background: black;
   color: white;
   font-family: Arial;
@@ -10,6 +11,78 @@ body {
   line-height: 1.8;
 }
 
+.hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.bg-glitch {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    #001f2f,
+    #140014,
+    #330000,
+    #001f2f
+  );
+
+  animation: moveBg 6s linear infinite;
+}
+
+@keyframes moveBg {
+
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-50px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+
+}
+
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  padding: 100px;
+}
+
 .glitch {
   font-size: 80px;
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+}
+
+.glitch::before {
+  transform: translate(2px,0);
+  text-shadow: -2px 0 cyan;
+}
+
+.glitch::after {
+  transform: translate(-2px,0);
+  text-shadow: 2px 0 magenta;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
 }
