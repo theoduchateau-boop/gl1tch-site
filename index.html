@@ -41,6 +41,7 @@
       <div class="hero-buttons">
         <button id="buyNowBtn" class="btn btn-primary">Acheter — 2,99€</button>
         <button id="openDetailsBtn" class="btn btn-secondary">Voir les détails</button>
+        <button id="openStoreBtn" class="btn btn-secondary">Trouver en magasin</button>
       </div>
 
       <div class="feature-cards">
@@ -111,6 +112,54 @@
             GL1TCH associe identité visuelle forte, fraîcheur aromatique et image premium pour proposer
             une boisson moderne, dynamique et tournée vers la nouvelle génération.
           </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup points de vente -->
+  <div id="storeModal" class="modal hidden">
+    <div class="modal-overlay" id="closeStoreOverlay"></div>
+
+    <div class="modal-content modal-store">
+      <button id="closeStoreBtn" class="modal-close">✕</button>
+
+      <p class="modal-kicker">Points de vente</p>
+      <h2>Où trouver GL1TCH</h2>
+
+      <div class="store-search">
+        <input
+          type="text"
+          id="citySearch"
+          class="store-input"
+          placeholder="Tape une ville : Paris, Lille, Lyon..."
+        />
+      </div>
+
+      <div class="store-layout">
+        <div class="store-list-panel">
+          <div id="storeResults" class="store-results"></div>
+        </div>
+
+        <div class="store-map-panel">
+          <iframe
+            id="storeMap"
+            class="store-map"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=2.2241%2C48.8156%2C2.4699%2C48.9022&layer=mapnik"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Carte des points de vente GL1TCH"
+          ></iframe>
+
+          <a
+            id="storeMapLink"
+            class="store-map-link"
+            href="https://www.openstreetmap.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ouvrir la carte en grand
+          </a>
         </div>
       </div>
     </div>

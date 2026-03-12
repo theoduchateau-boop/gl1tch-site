@@ -5,7 +5,61 @@ const product = {
   price: 2.99
 };
 
+const stores = [
+  {
+    id: 1,
+    city: "Paris",
+    name: "GL1TCH Store Châtelet",
+    address: "12 Rue de Rivoli, 75004 Paris",
+    embed:
+      "https://www.openstreetmap.org/export/embed.html?bbox=2.3280%2C48.8500%2C2.3650%2C48.8710&layer=mapnik",
+    link:
+      "https://www.openstreetmap.org/?mlat=48.8606&mlon=2.3522#map=14/48.8606/2.3522"
+  },
+  {
+    id: 2,
+    city: "Lille",
+    name: "Gaming Market Lille Centre",
+    address: "18 Place du Général de Gaulle, 59800 Lille",
+    embed:
+      "https://www.openstreetmap.org/export/embed.html?bbox=3.0400%2C50.6280%2C3.0800%2C50.6500&layer=mapnik",
+    link:
+      "https://www.openstreetmap.org/?mlat=50.6292&mlon=3.0573#map=14/50.6292/3.0573"
+  },
+  {
+    id: 3,
+    city: "Lyon",
+    name: "GL1TCH Corner Part-Dieu",
+    address: "42 Rue de la République, 69002 Lyon",
+    embed:
+      "https://www.openstreetmap.org/export/embed.html?bbox=4.8200%2C45.7480%2C4.8700%2C45.7720&layer=mapnik",
+    link:
+      "https://www.openstreetmap.org/?mlat=45.7640&mlon=4.8357#map=14/45.7640/4.8357"
+  },
+  {
+    id: 4,
+    city: "Marseille",
+    name: "Cyber Drinks Marseille",
+    address: "25 La Canebière, 13001 Marseille",
+    embed:
+      "https://www.openstreetmap.org/export/embed.html?bbox=5.3600%2C43.2880%2C5.3950%2C43.3050&layer=mapnik",
+    link:
+      "https://www.openstreetmap.org/?mlat=43.2965&mlon=5.3698#map=14/43.2965/5.3698"
+  },
+  {
+    id: 5,
+    city: "Bordeaux",
+    name: "Focus Drink Hub Bordeaux",
+    address: "9 Cours de l'Intendance, 33000 Bordeaux",
+    embed:
+      "https://www.openstreetmap.org/export/embed.html?bbox=-0.5950%2C44.8330%2C-0.5600%2C44.8500&layer=mapnik",
+    link:
+      "https://www.openstreetmap.org/?mlat=44.8378&mlon=-0.5792#map=14/44.8378/-0.5792"
+  }
+];
+
 let cart = [];
+let selectedStoreId = stores[0].id;
 
 const dyslexicToggle = document.getElementById("dyslexicToggle");
 
@@ -15,6 +69,15 @@ const buyNowBtn = document.getElementById("buyNowBtn");
 const detailsModal = document.getElementById("detailsModal");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const closeModalOverlay = document.getElementById("closeModalOverlay");
+
+const openStoreBtn = document.getElementById("openStoreBtn");
+const storeModal = document.getElementById("storeModal");
+const closeStoreBtn = document.getElementById("closeStoreBtn");
+const closeStoreOverlay = document.getElementById("closeStoreOverlay");
+const citySearch = document.getElementById("citySearch");
+const storeResults = document.getElementById("storeResults");
+const storeMap = document.getElementById("storeMap");
+const storeMapLink = document.getElementById("storeMapLink");
 
 const cartToggle = document.getElementById("cartToggle");
 const closeCartBtn = document.getElementById("closeCartBtn");
@@ -35,6 +98,17 @@ function openModal() {
 
 function closeModal() {
   detailsModal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+function openStoreModal() {
+  storeModal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  renderStores(citySearch.value);
+}
+
+function closeStoreModal() {
+  storeModal.classList.add("hidden");
   document.body.style.overflow = "";
 }
 
@@ -137,6 +211,59 @@ function renderCart() {
   }).join("");
 }
 
+function updateMap(store) {
+  storeMap.src = store.embed;
+  storeMapLink.href = store.link;
+}
+
+function renderStores(searchValue = "") {
+  const normalizedSearch = searchValue.trim().toLowerCase();
+
+  const filteredStores = stores.filter(store => {
+    return (
+      store.city.toLowerCase().includes(normalizedSearch) ||
+      store.name.toLowerCase().includes(normalizedSearch) ||
+      store.address.toLowerCase().includes(normalizedSearch)
+    );
+  });
+
+  if (filteredStores.length === 0) {
+    storeResults.innerHTML = `<p class="store-empty">Aucun point de vente trouvé pour cette recherche.</p>`;
+    return;
+  }
+
+  if (!filteredStores.some(store => store.id === selectedStoreId)) {
+    selectedStoreId = filteredStores[0].id;
+  }
+
+  const selectedStore = filteredStores.find(store => store.id === selectedStoreId) || filteredStores[0];
+  updateMap(selectedStore);
+
+  storeResults.innerHTML = filteredStores.map(store => {
+    const activeClass = store.id === selectedStoreId ? "active" : "";
+
+    return `
+      <div class="store-card ${activeClass}">
+        <div class="store-city">${store.city}</div>
+        <div class="store-name">${store.name}</div>
+        <div class="store-address">${store.address}</div>
+        <button class="store-select-btn" onclick="selectStore(${store.id}, '${escapeForAttribute(searchValue)}')">
+          Voir sur la carte
+        </button>
+      </div>
+    `;
+  }).join("");
+}
+
+function selectStore(id, currentSearch = "") {
+  selectedStoreId = id;
+  renderStores(currentSearch);
+}
+
+function escapeForAttribute(value) {
+  return value.replace(/'/g, "\\'");
+}
+
 dyslexicToggle.addEventListener("click", () => {
   document.body.classList.toggle("dyslexic-mode");
 });
@@ -144,6 +271,14 @@ dyslexicToggle.addEventListener("click", () => {
 openDetailsBtn.addEventListener("click", openModal);
 closeModalBtn.addEventListener("click", closeModal);
 closeModalOverlay.addEventListener("click", closeModal);
+
+openStoreBtn.addEventListener("click", openStoreModal);
+closeStoreBtn.addEventListener("click", closeStoreModal);
+closeStoreOverlay.addEventListener("click", closeStoreModal);
+
+citySearch.addEventListener("input", (event) => {
+  renderStores(event.target.value);
+});
 
 buyNowBtn.addEventListener("click", addToCart);
 
@@ -154,6 +289,7 @@ cartBackdrop.addEventListener("click", closeCart);
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     closeModal();
+    closeStoreModal();
     closeCart();
   }
 });
@@ -161,5 +297,7 @@ document.addEventListener("keydown", (event) => {
 window.increaseQuantity = increaseQuantity;
 window.decreaseQuantity = decreaseQuantity;
 window.removeItem = removeItem;
+window.selectStore = selectStore;
 
 renderCart();
+renderStores();
