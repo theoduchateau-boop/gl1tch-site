@@ -1,0 +1,15 @@
+body {
+  background: black;
+  color: white;
+  font-family: Arial;
+}
+
+.font-dyslexic {
+  font-family: Verdana;
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+}
+
+.glitch {
+  font-size: 80px;
+}
