@@ -7,17 +7,12 @@
   --text: #f5f7fa;
   --muted: #b3b9c5;
   --accent: #ffffff;
-  --accent-soft: rgba(255, 255, 255, 0.12);
   --cyan: #00e5ff;
   --pink: #ff4fd8;
   --lime: #d6ff3f;
   --red-glow: rgba(255, 0, 60, 0.14);
   --blue-glow: rgba(0, 170, 255, 0.12);
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-  --radius-xl: 28px;
-  --radius-lg: 20px;
-  --radius-md: 16px;
-  --radius-sm: 12px;
   --transition: 0.25s ease;
 }
 
@@ -60,6 +55,10 @@ button {
 img {
   display: block;
   max-width: 100%;
+}
+
+a {
+  color: inherit;
 }
 
 .bg-grid {
@@ -417,7 +416,7 @@ img {
 }
 
 .modal-store {
-  width: min(1100px, calc(100% - 32px));
+  width: min(1120px, calc(100% - 32px));
 }
 
 .modal-close {
@@ -469,8 +468,41 @@ img {
   line-height: 1.7;
 }
 
+.route-box {
+  margin-bottom: 18px;
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.route-box-header h3 {
+  margin: 0 0 8px;
+}
+
+.route-box-header p {
+  margin: 0 0 14px;
+  color: #bfc7d2;
+}
+
+.route-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+.route-btn {
+  white-space: nowrap;
+}
+
+.route-status {
+  margin: 12px 0 0;
+  color: #9fdfff;
+  min-height: 22px;
+}
+
 .store-search {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .store-input {
@@ -505,7 +537,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 430px;
+  max-height: 500px;
   overflow-y: auto;
 }
 
@@ -523,12 +555,12 @@ img {
 }
 
 .store-card.active {
-  border-color: rgba(0,229,255,0.55);
-  box-shadow: 0 0 0 1px rgba(0,229,255,0.15);
+  border-color: rgba(255, 70, 70, 0.65);
+  box-shadow: 0 0 0 1px rgba(255, 70, 70, 0.18);
 }
 
 .store-city {
-  color: #8fdfff;
+  color: #ff9e9e;
   font-size: 0.88rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -565,9 +597,15 @@ img {
 
 .store-map {
   width: 100%;
-  min-height: 430px;
+  min-height: 500px;
   border: 0;
   border-radius: 16px;
+  background: #111;
+}
+
+.store-map-actions {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .store-map-link {
@@ -800,8 +838,12 @@ img {
     grid-template-columns: 1fr;
   }
 
+  .route-controls {
+    grid-template-columns: 1fr;
+  }
+
   .store-map {
-    min-height: 320px;
+    min-height: 340px;
   }
 }
 

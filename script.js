@@ -11,50 +11,40 @@ const stores = [
     city: "Paris",
     name: "GL1TCH Store Châtelet",
     address: "12 Rue de Rivoli, 75004 Paris",
-    embed:
-      "https://www.openstreetmap.org/export/embed.html?bbox=2.3280%2C48.8500%2C2.3650%2C48.8710&layer=mapnik",
-    link:
-      "https://www.openstreetmap.org/?mlat=48.8606&mlon=2.3522#map=14/48.8606/2.3522"
+    lat: 48.8606,
+    lon: 2.3522
   },
   {
     id: 2,
     city: "Lille",
     name: "Gaming Market Lille Centre",
     address: "18 Place du Général de Gaulle, 59800 Lille",
-    embed:
-      "https://www.openstreetmap.org/export/embed.html?bbox=3.0400%2C50.6280%2C3.0800%2C50.6500&layer=mapnik",
-    link:
-      "https://www.openstreetmap.org/?mlat=50.6292&mlon=3.0573#map=14/50.6292/3.0573"
+    lat: 50.6369,
+    lon: 3.0637
   },
   {
     id: 3,
     city: "Lyon",
     name: "GL1TCH Corner Part-Dieu",
     address: "42 Rue de la République, 69002 Lyon",
-    embed:
-      "https://www.openstreetmap.org/export/embed.html?bbox=4.8200%2C45.7480%2C4.8700%2C45.7720&layer=mapnik",
-    link:
-      "https://www.openstreetmap.org/?mlat=45.7640&mlon=4.8357#map=14/45.7640/4.8357"
+    lat: 45.764,
+    lon: 4.8357
   },
   {
     id: 4,
     city: "Marseille",
     name: "Cyber Drinks Marseille",
     address: "25 La Canebière, 13001 Marseille",
-    embed:
-      "https://www.openstreetmap.org/export/embed.html?bbox=5.3600%2C43.2880%2C5.3950%2C43.3050&layer=mapnik",
-    link:
-      "https://www.openstreetmap.org/?mlat=43.2965&mlon=5.3698#map=14/43.2965/5.3698"
+    lat: 43.2965,
+    lon: 5.3698
   },
   {
     id: 5,
     city: "Bordeaux",
     name: "Focus Drink Hub Bordeaux",
     address: "9 Cours de l'Intendance, 33000 Bordeaux",
-    embed:
-      "https://www.openstreetmap.org/export/embed.html?bbox=-0.5950%2C44.8330%2C-0.5600%2C44.8500&layer=mapnik",
-    link:
-      "https://www.openstreetmap.org/?mlat=44.8378&mlon=-0.5792#map=14/44.8378/-0.5792"
+    lat: 44.8378,
+    lon: -0.5792
   }
 ];
 
@@ -78,6 +68,10 @@ const citySearch = document.getElementById("citySearch");
 const storeResults = document.getElementById("storeResults");
 const storeMap = document.getElementById("storeMap");
 const storeMapLink = document.getElementById("storeMapLink");
+
+const userAddressInput = document.getElementById("userAddress");
+const routeBtn = document.getElementById("routeBtn");
+const routeStatus = document.getElementById("routeStatus");
 
 const cartToggle = document.getElementById("cartToggle");
 const closeCartBtn = document.getElementById("closeCartBtn");
@@ -110,6 +104,7 @@ function openStoreModal() {
 function closeStoreModal() {
   storeModal.classList.add("hidden");
   document.body.style.overflow = "";
+  routeStatus.textContent = "";
 }
 
 function openCart() {
@@ -125,7 +120,7 @@ function closeCart() {
 }
 
 function addToCart() {
-  const existingItem = cart.find(item => item.id === product.id);
+  const existingItem = cart.find((item) => item.id === product.id);
 
   if (existingItem) {
     existingItem.quantity += 1;
@@ -141,7 +136,7 @@ function addToCart() {
 }
 
 function increaseQuantity(id) {
-  const item = cart.find(item => item.id === id);
+  const item = cart.find((entry) => entry.id === id);
   if (!item) return;
 
   item.quantity += 1;
@@ -149,20 +144,20 @@ function increaseQuantity(id) {
 }
 
 function decreaseQuantity(id) {
-  const item = cart.find(item => item.id === id);
+  const item = cart.find((entry) => entry.id === id);
   if (!item) return;
 
   item.quantity -= 1;
 
   if (item.quantity <= 0) {
-    cart = cart.filter(cartItem => cartItem.id !== id);
+    cart = cart.filter((cartItem) => cartItem.id !== id);
   }
 
   renderCart();
 }
 
 function removeItem(id) {
-  cart = cart.filter(item => item.id !== id);
+  cart = cart.filter((item) => item.id !== id);
   renderCart();
 }
 
@@ -186,7 +181,7 @@ function renderCart() {
     return;
   }
 
-  cartItemsContainer.innerHTML = cart.map(item => {
+  cartItemsContainer.innerHTML = cart.map((item) => {
     return `
       <div class="cart-item">
         <div class="cart-item-top">
@@ -211,15 +206,32 @@ function renderCart() {
   }).join("");
 }
 
+function getSelectedStore() {
+  return stores.find((store) => store.id === selectedStoreId) || stores[0];
+}
+
+function buildEmbedMapUrl(lat, lon, zoomDelta = 0.08) {
+  const left = lon - zoomDelta;
+  const right = lon + zoomDelta;
+  const bottom = lat - zoomDelta;
+  const top = lat + zoomDelta;
+
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${left}%2C${bottom}%2C${right}%2C${top}&layer=mapnik&marker=${lat}%2C${lon}`;
+}
+
+function buildOpenStreetMapLink(lat, lon) {
+  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=14/${lat}/${lon}`;
+}
+
 function updateMap(store) {
-  storeMap.src = store.embed;
-  storeMapLink.href = store.link;
+  storeMap.src = buildEmbedMapUrl(store.lat, store.lon, 0.06);
+  storeMapLink.href = buildOpenStreetMapLink(store.lat, store.lon);
 }
 
 function renderStores(searchValue = "") {
   const normalizedSearch = searchValue.trim().toLowerCase();
 
-  const filteredStores = stores.filter(store => {
+  const filteredStores = stores.filter((store) => {
     return (
       store.city.toLowerCase().includes(normalizedSearch) ||
       store.name.toLowerCase().includes(normalizedSearch) ||
@@ -232,14 +244,14 @@ function renderStores(searchValue = "") {
     return;
   }
 
-  if (!filteredStores.some(store => store.id === selectedStoreId)) {
+  if (!filteredStores.some((store) => store.id === selectedStoreId)) {
     selectedStoreId = filteredStores[0].id;
   }
 
-  const selectedStore = filteredStores.find(store => store.id === selectedStoreId) || filteredStores[0];
+  const selectedStore = filteredStores.find((store) => store.id === selectedStoreId) || filteredStores[0];
   updateMap(selectedStore);
 
-  storeResults.innerHTML = filteredStores.map(store => {
+  storeResults.innerHTML = filteredStores.map((store) => {
     const activeClass = store.id === selectedStoreId ? "active" : "";
 
     return `
@@ -258,10 +270,62 @@ function renderStores(searchValue = "") {
 function selectStore(id, currentSearch = "") {
   selectedStoreId = id;
   renderStores(currentSearch);
+  routeStatus.textContent = "";
 }
 
 function escapeForAttribute(value) {
   return value.replace(/'/g, "\\'");
+}
+
+async function geocodeAddress(address) {
+  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(address)}`;
+
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Erreur réseau");
+  }
+
+  const data = await response.json();
+
+  if (!data.length) {
+    throw new Error("Adresse introuvable");
+  }
+
+  return {
+    lat: parseFloat(data[0].lat),
+    lon: parseFloat(data[0].lon),
+    label: data[0].display_name
+  };
+}
+
+async function calculateRoute() {
+  const address = userAddressInput.value.trim();
+  const store = getSelectedStore();
+
+  if (!address) {
+    routeStatus.textContent = "Entre ton adresse pour calculer l’itinéraire.";
+    return;
+  }
+
+  routeStatus.textContent = "Recherche de l’adresse...";
+
+  try {
+    const userLocation = await geocodeAddress(address);
+
+    const directionsUrl =
+      `https://www.openstreetmap.org/directions?engine=fossgis_osrm_car` +
+      `&route=${userLocation.lat}%2C${userLocation.lon}%3B${store.lat}%2C${store.lon}`;
+
+    routeStatus.textContent = `Itinéraire prêt vers ${store.name}.`;
+    window.open(directionsUrl, "_blank", "noopener,noreferrer");
+  } catch (error) {
+    routeStatus.textContent = "Impossible de trouver cette adresse. Essaie avec une adresse plus précise.";
+  }
 }
 
 dyslexicToggle.addEventListener("click", () => {
@@ -278,6 +342,14 @@ closeStoreOverlay.addEventListener("click", closeStoreModal);
 
 citySearch.addEventListener("input", (event) => {
   renderStores(event.target.value);
+});
+
+routeBtn.addEventListener("click", calculateRoute);
+
+userAddressInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    calculateRoute();
+  }
 });
 
 buyNowBtn.addEventListener("click", addToCart);

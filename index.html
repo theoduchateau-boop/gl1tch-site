@@ -136,6 +136,25 @@
         />
       </div>
 
+      <div class="route-box">
+        <div class="route-box-header">
+          <h3>Ton itinéraire</h3>
+          <p>Entre ton adresse puis ouvre l’itinéraire vers le magasin sélectionné.</p>
+        </div>
+
+        <div class="route-controls">
+          <input
+            type="text"
+            id="userAddress"
+            class="store-input"
+            placeholder="Exemple : 10 rue Nationale, Lille"
+          />
+          <button id="routeBtn" class="btn btn-primary route-btn">Calculer l’itinéraire</button>
+        </div>
+
+        <p id="routeStatus" class="route-status"></p>
+      </div>
+
       <div class="store-layout">
         <div class="store-list-panel">
           <div id="storeResults" class="store-results"></div>
@@ -145,21 +164,23 @@
           <iframe
             id="storeMap"
             class="store-map"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=2.2241%2C48.8156%2C2.4699%2C48.9022&layer=mapnik"
+            src=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             title="Carte des points de vente GL1TCH"
           ></iframe>
 
-          <a
-            id="storeMapLink"
-            class="store-map-link"
-            href="https://www.openstreetmap.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Ouvrir la carte en grand
-          </a>
+          <div class="store-map-actions">
+            <a
+              id="storeMapLink"
+              class="store-map-link"
+              href="https://www.openstreetmap.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ouvrir la carte en grand
+            </a>
+          </div>
         </div>
       </div>
     </div>
