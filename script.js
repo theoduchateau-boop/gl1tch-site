@@ -69,9 +69,21 @@ const themeContent = {
   }
 };
 
+const voteStorageKey = "gl1tch-vote-results";
+const voteUserChoiceKey = "gl1tch-user-vote";
+
+const defaultVoteResults = {
+  "neon-berry": 18,
+  "arctic-mint": 14,
+  "solar-mango": 11,
+  "forest-lime": 16
+};
+
 let cart = [];
 let selectedStoreId = stores[0].id;
 let currentTheme = localStorage.getItem("gl1tch-theme") || "gaming";
+let voteResults = loadVoteResults();
+let userVote = localStorage.getItem(voteUserChoiceKey);
 
 const themeToggle = document.getElementById("themeToggle");
 const heroThemeImage = document.getElementById("heroThemeImage");
@@ -107,6 +119,13 @@ const storeMapLink = document.getElementById("storeMapLink");
 const userAddressInput = document.getElementById("userAddress");
 const routeBtn = document.getElementById("routeBtn");
 const routeStatus = document.getElementById("routeStatus");
+
+const openVoteBtn = document.getElementById("openVoteBtn");
+const voteModal = document.getElementById("voteModal");
+const closeVoteBtn = document.getElementById("closeVoteBtn");
+const closeVoteOverlay = document.getElementById("closeVoteOverlay");
+const voteGrid = document.getElementById("voteGrid");
+const voteMessage = document.getElementById("voteMessage");
 
 const cartToggle = document.getElementById("cartToggle");
 const closeCartBtn = document.getElementById("closeCartBtn");
@@ -147,48 +166,71 @@ function setBodyLock(isLocked) {
   document.body.style.overflow = isLocked ? "hidden" : "";
 }
 
+function anyModalOpen() {
+  return !detailsModal.classList.contains("hidden") ||
+    !healthModal.classList.contains("hidden") ||
+    !storeModal.classList.contains("hidden") ||
+    !voteModal.classList.contains("hidden");
+}
+
+function updateBodyLock() {
+  const shouldLock = anyModalOpen() || cartPanel.classList.contains("open");
+  setBodyLock(shouldLock);
+}
+
 function openModal() {
   detailsModal.classList.remove("hidden");
-  setBodyLock(true);
+  updateBodyLock();
 }
 
 function closeModal() {
   detailsModal.classList.add("hidden");
-  setBodyLock(false);
+  updateBodyLock();
 }
 
 function openHealthModal() {
   healthModal.classList.remove("hidden");
-  setBodyLock(true);
+  updateBodyLock();
 }
 
 function closeHealthModal() {
   healthModal.classList.add("hidden");
-  setBodyLock(false);
+  updateBodyLock();
 }
 
 function openStoreModal() {
   storeModal.classList.remove("hidden");
-  setBodyLock(true);
+  updateBodyLock();
   renderStores(citySearch.value);
 }
 
 function closeStoreModal() {
   storeModal.classList.add("hidden");
-  setBodyLock(false);
   routeStatus.textContent = "";
+  updateBodyLock();
+}
+
+function openVoteModal() {
+  voteModal.classList.remove("hidden");
+  renderVoteResults(true);
+  updateBodyLock();
+}
+
+function closeVoteModal() {
+  voteModal.classList.add("hidden");
+  updateBodyLock();
 }
 
 function openCart() {
   cartPanel.classList.add("open");
   cartBackdrop.classList.add("show");
-  setBodyLock(true);
+  updateBodyLock();
 }
 
 function closeCart() {
   cartPanel.classList.remove("open");
   cartBackdrop.classList.remove("show");
-  setBodyLock(false);
+  updateBodyLock();
 }
 
 function addToCart() {
@@ -399,6 +441,152 @@ async function calculateRoute() {
   }
 }
 
+/* Vote system */
+function loadVoteResults() {
+  const savedResults = localStorage.getItem(voteStorageKey);
+
+  if (!savedResults) {
+    localStorage.setItem(voteStorageKey, JSON.stringify(defaultVoteResults));
+    return { ...defaultVoteResults };
+  }
+
+  try {
+    const parsed = JSON.parse(savedResults);
+    return {
+      "neon-berry": Number(parsed["neon-berry"]) || 0,
+      "arctic-mint": Number(parsed["arctic-mint"]) || 0,
+      "solar-mango": Number(parsed["solar-mango"]) || 0,
+      "forest-lime": Number(parsed["forest-lime"]) || 0
+    };
+  } catch (error) {
+    localStorage.setItem(voteStorageKey, JSON.stringify(defaultVoteResults));
+    return { ...defaultVoteResults };
+  }
+}
+
+function saveVoteResults() {
+  localStorage.setItem(voteStorageKey, JSON.stringify(voteResults));
+}
+
+function getTotalVotes() {
+  return Object.values(voteResults).reduce((sum, value) => sum + value, 0);
+}
+
+function getVoteLabel(count) {
+  return count > 1 ? `${count} votes` : `${count} vote`;
+}
+
+function getWinningFlavor() {
+  const entries = Object.entries(voteResults);
+  entries.sort((a, b) => b[1] - a[1]);
+  return entries[0] ? entries[0][0] : null;
+}
+
+function prettyFlavorName(flavor) {
+  const labels = {
+    "neon-berry": "Neon Berry",
+    "arctic-mint": "Arctic Mint",
+    "solar-mango": "Solar Mango",
+    "forest-lime": "Forest Lime"
+  };
+
+  return labels[flavor] || flavor;
+}
+
+function updateVoteMessage() {
+  if (userVote) {
+    voteMessage.textContent = `Ton vote a bien été enregistré pour ${prettyFlavorName(userVote)}. Les résultats restent visibles mais tu ne peux pas voter une deuxième fois.`;
+    return;
+  }
+
+  const winner = getWinningFlavor();
+  const totalVotes = getTotalVotes();
+
+  if (!winner || totalVotes === 0) {
+    voteMessage.textContent = "Choisis ton goût préféré et regarde les résultats s’animer en direct.";
+    return;
+  }
+
+  voteMessage.textContent = `${prettyFlavorName(winner)} est actuellement en tête. ${totalVotes} votes enregistrés sur ce navigateur partagé.`;
+}
+
+function renderVoteResults(animate = false) {
+  const cards = Array.from(voteGrid.querySelectorAll(".vote-card"));
+  const totalVotes = getTotalVotes();
+
+  cards.forEach((card) => {
+    const flavor = card.dataset.flavor;
+    const count = voteResults[flavor] || 0;
+    const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+
+    const percentNode = card.querySelector(".vote-percent");
+    const countNode = card.querySelector(".vote-count");
+    const fillNode = card.querySelector(".vote-bar-fill");
+    const buttonNode = card.querySelector(".vote-btn");
+    const choiceBadge = card.querySelector(".vote-choice-badge");
+
+    percentNode.textContent = `${percent}%`;
+    countNode.textContent = getVoteLabel(count);
+
+    if (animate) {
+      fillNode.style.width = "0%";
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          fillNode.style.width = `${percent}%`;
+        }, 60);
+      });
+    } else {
+      fillNode.style.width = `${percent}%`;
+    }
+
+    const isUserChoice = userVote === flavor;
+
+    card.classList.toggle("selected", isUserChoice);
+    choiceBadge.classList.toggle("hidden", !isUserChoice);
+
+    if (userVote) {
+      buttonNode.disabled = true;
+      buttonNode.textContent = isUserChoice ? "Vote enregistré" : "Vote terminé";
+    } else {
+      buttonNode.disabled = false;
+      buttonNode.textContent = "Voter";
+    }
+  });
+
+  updateVoteMessage();
+}
+
+function submitVote(flavor) {
+  if (userVote) {
+    renderVoteResults(true);
+    return;
+  }
+
+  if (!Object.prototype.hasOwnProperty.call(voteResults, flavor)) {
+    return;
+  }
+
+  voteResults[flavor] += 1;
+  userVote = flavor;
+
+  localStorage.setItem(voteUserChoiceKey, flavor);
+  saveVoteResults();
+  renderVoteResults(true);
+}
+
+function bindVoteButtons() {
+  const cards = Array.from(voteGrid.querySelectorAll(".vote-card"));
+
+  cards.forEach((card) => {
+    const button = card.querySelector(".vote-btn");
+    const flavor = card.dataset.flavor;
+
+    button.addEventListener("click", () => {
+      submitVote(flavor);
+    });
+  });
+}
+
 themeToggle.addEventListener("click", toggleTheme);
 
 dyslexicToggle.addEventListener("click", () => {
@@ -416,6 +604,10 @@ closeHealthOverlay.addEventListener("click", closeHealthModal);
 openStoreBtn.addEventListener("click", openStoreModal);
 closeStoreBtn.addEventListener("click", closeStoreModal);
 closeStoreOverlay.addEventListener("click", closeStoreModal);
+
+openVoteBtn.addEventListener("click", openVoteModal);
+closeVoteBtn.addEventListener("click", closeVoteModal);
+closeVoteOverlay.addEventListener("click", closeVoteModal);
 
 citySearch.addEventListener("input", (event) => {
   renderStores(event.target.value);
@@ -440,6 +632,7 @@ document.addEventListener("keydown", (event) => {
     closeModal();
     closeHealthModal();
     closeStoreModal();
+    closeVoteModal();
     closeCart();
   }
 });
@@ -452,3 +645,5 @@ window.selectStore = selectStore;
 applyTheme(currentTheme);
 renderCart();
 renderStores();
+bindVoteButtons();
+renderVoteResults();

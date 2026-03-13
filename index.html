@@ -54,7 +54,8 @@
             <button id="buyNowBtn" class="btn btn-primary">Acheter — 2,99€</button>
             <button id="openDetailsBtn" class="btn btn-secondary">Voir les détails</button>
             <button id="openStoreBtn" class="btn btn-secondary">Trouver en magasin</button>
-            <button id="openHealthBtn" class="btn btn-secondary">La santé et GL1TCH (Comparateur)</button>
+            <button id="openHealthBtn" class="btn btn-secondary">La santé et GL1TCH</button>
+            <button id="openVoteBtn" class="btn btn-secondary">Vote prochain goût</button>
           </div>
         </div>
       </div>
@@ -62,11 +63,11 @@
       <div class="feature-cards">
         <div class="feature-card">
           <span class="feature-label">Focus</span>
-          <strong id="featureFocus">Stable</strong>
+          <strong id="featureFocus">Équilibré</strong>
         </div>
         <div class="feature-card">
           <span class="feature-label">Goût</span>
-          <strong id="featureTaste">Cyber Lime</strong>
+          <strong id="featureTaste">Fresh Lime</strong>
         </div>
         <div class="feature-card">
           <span class="feature-label">Format</span>
@@ -83,9 +84,9 @@
     </section>
   </main>
 
+  <!-- Popup détails -->
   <div id="detailsModal" class="modal hidden">
     <div class="modal-overlay" id="closeModalOverlay"></div>
-
     <div class="modal-content">
       <button id="closeModalBtn" class="modal-close">✕</button>
 
@@ -131,9 +132,9 @@
     </div>
   </div>
 
+  <!-- Popup santé -->
   <div id="healthModal" class="modal hidden">
     <div class="modal-overlay" id="closeHealthOverlay"></div>
-
     <div class="modal-content modal-health">
       <button id="closeHealthBtn" class="modal-close">✕</button>
 
@@ -183,104 +184,109 @@
           </ul>
         </article>
       </div>
+    </div>
+  </div>
 
-      <div class="body-section">
-        <div class="body-card body-card-red">
-          <div class="body-card-header">
-            <span class="body-pill body-pill-red">Boisson classique</span>
-            <h3>Ce qui peut être moins favorable</h3>
-          </div>
+  <!-- Popup vote -->
+  <div id="voteModal" class="modal hidden">
+    <div class="modal-overlay" id="closeVoteOverlay"></div>
+    <div class="modal-content modal-vote">
+      <button id="closeVoteBtn" class="modal-close">✕</button>
 
-          <div class="body-visual-row">
-            <div class="human human-red">
-              <div class="human-head"></div>
-              <div class="human-torso"></div>
-              <div class="human-arm arm-left"></div>
-              <div class="human-arm arm-right"></div>
-              <div class="human-leg leg-left"></div>
-              <div class="human-leg leg-right"></div>
+      <p class="modal-kicker">Vote communauté</p>
+      <h2>Vote pour le prochain goût</h2>
+      <p class="vote-intro">
+        Aide la communauté GL1TCH à choisir la prochaine saveur. Un vote par navigateur.
+      </p>
 
-              <span class="hotspot hotspot-head"></span>
-              <span class="hotspot hotspot-heart"></span>
-              <span class="hotspot hotspot-stomach"></span>
-              <span class="hotspot hotspot-energy"></span>
-            </div>
-
-            <div class="body-explain">
-              <div class="body-item">
-                <h4>Tête / sommeil</h4>
-                <p>Trop de caféine peut favoriser nervosité, agitation et sommeil moins bon.</p>
-              </div>
-              <div class="body-item">
-                <h4>Dents / sucre</h4>
-                <p>Les boissons sucrées fréquentes sont moins favorables pour les dents.</p>
-              </div>
-              <div class="body-item">
-                <h4>Ventre</h4>
-                <p>Les formules très agressives peuvent être moins confortables selon les personnes.</p>
-              </div>
-              <div class="body-item">
-                <h4>Énergie</h4>
-                <p>Le ressenti peut être plus brutal, avec un pic rapide puis une retombée.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="body-card body-card-green">
-          <div class="body-card-header">
-            <span class="body-pill body-pill-green">GL1TCH</span>
-            <h3>Ce qu’on met en avant</h3>
-          </div>
-
-          <div class="body-visual-row">
-            <div class="human human-green">
-              <div class="human-head"></div>
-              <div class="human-torso"></div>
-              <div class="human-arm arm-left"></div>
-              <div class="human-arm arm-right"></div>
-              <div class="human-leg leg-left"></div>
-              <div class="human-leg leg-right"></div>
-
-              <span class="hotspot hotspot-head"></span>
-              <span class="hotspot hotspot-heart"></span>
-              <span class="hotspot hotspot-stomach"></span>
-              <span class="hotspot hotspot-energy"></span>
-            </div>
-
-            <div class="body-explain">
-              <div class="body-item">
-                <h4>Tête / focus</h4>
-                <p>Caféine plus modérée pour une stimulation perçue comme plus maîtrisée.</p>
-              </div>
-              <div class="body-item">
-                <h4>Dents / sucre</h4>
-                <p>Sans sucres ajoutés dans cette version imaginée, donc positionnement plus clean.</p>
-              </div>
-              <div class="body-item">
-                <h4>Ventre</h4>
-                <p>Formule visuellement pensée pour être plus légère et plus simple à lire.</p>
-              </div>
-              <div class="body-item">
-                <h4>Énergie</h4>
-                <p>Objectif : focus plus stable, hydratation mieux mise en avant et image premium.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="vote-banner">
+        <div class="vote-banner-badge">LIVE COMMUNITY PICK</div>
+        <p id="voteMessage">Choisis ton goût préféré et regarde les résultats s’animer en direct.</p>
       </div>
 
-      <div class="health-note">
-        <p>
-          GL1TCH présenté ici : eau, électrolytes, extrait de thé vert, caféine modérée, vitamines B, magnésium, arômes naturels.
-        </p>
+      <div class="vote-grid" id="voteGrid">
+        <article class="vote-card" data-flavor="neon-berry">
+          <div class="vote-card-top">
+            <span class="vote-flavor-tag tag-pink">NEON BERRY</span>
+            <span class="vote-choice-badge hidden">Ton vote</span>
+          </div>
+          <h3>Neon Berry</h3>
+          <p class="vote-description">Un mix fruit rouge / baie froide, nerveux et très gaming.</p>
+          <div class="vote-stats">
+            <div class="vote-stat-line">
+              <span class="vote-percent">0%</span>
+              <span class="vote-count">0 votes</span>
+            </div>
+            <div class="vote-bar">
+              <div class="vote-bar-fill fill-pink"></div>
+            </div>
+          </div>
+          <button class="btn btn-secondary vote-btn">Voter</button>
+        </article>
+
+        <article class="vote-card" data-flavor="arctic-mint">
+          <div class="vote-card-top">
+            <span class="vote-flavor-tag tag-cyan">ARCTIC MINT</span>
+            <span class="vote-choice-badge hidden">Ton vote</span>
+          </div>
+          <h3>Arctic Mint</h3>
+          <p class="vote-description">Une fraîcheur glacée, clean, nerveuse et ultra rafraîchissante.</p>
+          <div class="vote-stats">
+            <div class="vote-stat-line">
+              <span class="vote-percent">0%</span>
+              <span class="vote-count">0 votes</span>
+            </div>
+            <div class="vote-bar">
+              <div class="vote-bar-fill fill-cyan"></div>
+            </div>
+          </div>
+          <button class="btn btn-secondary vote-btn">Voter</button>
+        </article>
+
+        <article class="vote-card" data-flavor="solar-mango">
+          <div class="vote-card-top">
+            <span class="vote-flavor-tag tag-gold">SOLAR MANGO</span>
+            <span class="vote-choice-badge hidden">Ton vote</span>
+          </div>
+          <h3>Solar Mango</h3>
+          <p class="vote-description">Une mangue lumineuse, exotique, douce et percutante.</p>
+          <div class="vote-stats">
+            <div class="vote-stat-line">
+              <span class="vote-percent">0%</span>
+              <span class="vote-count">0 votes</span>
+            </div>
+            <div class="vote-bar">
+              <div class="vote-bar-fill fill-gold"></div>
+            </div>
+          </div>
+          <button class="btn btn-secondary vote-btn">Voter</button>
+        </article>
+
+        <article class="vote-card" data-flavor="forest-lime">
+          <div class="vote-card-top">
+            <span class="vote-flavor-tag tag-green">FOREST LIME</span>
+            <span class="vote-choice-badge hidden">Ton vote</span>
+          </div>
+          <h3>Forest Lime</h3>
+          <p class="vote-description">Une citron vert fraîche et végétale, parfaite pour le mode nature.</p>
+          <div class="vote-stats">
+            <div class="vote-stat-line">
+              <span class="vote-percent">0%</span>
+              <span class="vote-count">0 votes</span>
+            </div>
+            <div class="vote-bar">
+              <div class="vote-bar-fill fill-green"></div>
+            </div>
+          </div>
+          <button class="btn btn-secondary vote-btn">Voter</button>
+        </article>
       </div>
     </div>
   </div>
 
+  <!-- Popup points de vente -->
   <div id="storeModal" class="modal hidden">
     <div class="modal-overlay" id="closeStoreOverlay"></div>
-
     <div class="modal-content modal-store">
       <button id="closeStoreBtn" class="modal-close">✕</button>
 
