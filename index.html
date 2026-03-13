@@ -56,6 +56,7 @@
             <button id="openStoreBtn" class="btn btn-secondary">Trouver en magasin</button>
             <button id="openHealthBtn" class="btn btn-secondary">La santé et GL1TCH</button>
             <button id="openVoteBtn" class="btn btn-secondary">Vote prochain goût</button>
+            <button id="openReviewsBtn" class="btn btn-secondary">Avis clients</button>
           </div>
         </div>
       </div>
@@ -74,83 +75,6 @@
           <strong>500ml</strong>
         </div>
       </div>
-
-      <section class="reviews-section">
-        <div class="reviews-header">
-          <div>
-            <p class="modal-kicker">Avis clients</p>
-            <h2>La communauté donne son avis</h2>
-            <p class="reviews-intro">
-              Note GL1TCH avec des boissons et partage ton ressenti directement sur le site.
-            </p>
-          </div>
-
-          <div class="reviews-summary-card">
-            <div class="reviews-summary-top">
-              <span class="reviews-average-number" id="reviewsAverageNumber">5,0</span>
-              <span class="reviews-average-label">note moyenne</span>
-            </div>
-            <div class="drink-rating large" id="reviewsAverageDrinks" aria-label="Note moyenne">
-              <span class="drink-icon active">🥤</span>
-              <span class="drink-icon active">🥤</span>
-              <span class="drink-icon active">🥤</span>
-              <span class="drink-icon active">🥤</span>
-              <span class="drink-icon active">🥤</span>
-            </div>
-            <p class="reviews-count" id="reviewsCount">Basé sur 0 avis</p>
-          </div>
-        </div>
-
-        <div class="reviews-layout">
-          <div class="review-form-card">
-            <h3>Écrire un avis</h3>
-            <p class="review-form-text">
-              Donne une note de 1 à 5 boissons puis écris ton retour.
-            </p>
-
-            <form id="reviewForm" class="review-form">
-              <label class="review-label" for="reviewName">Nom</label>
-              <input
-                id="reviewName"
-                class="review-input"
-                type="text"
-                maxlength="40"
-                placeholder="Exemple : Alex"
-                required
-              />
-
-              <label class="review-label">Ta note</label>
-              <div class="review-rating-picker" id="reviewRatingPicker" aria-label="Choisir une note">
-                <button type="button" class="rating-drink active" data-rating="1">🥤</button>
-                <button type="button" class="rating-drink active" data-rating="2">🥤</button>
-                <button type="button" class="rating-drink active" data-rating="3">🥤</button>
-                <button type="button" class="rating-drink active" data-rating="4">🥤</button>
-                <button type="button" class="rating-drink active" data-rating="5">🥤</button>
-              </div>
-              <p class="review-rating-text" id="reviewRatingText">5 boissons / 5</p>
-
-              <label class="review-label" for="reviewMessage">Ton avis</label>
-              <textarea
-                id="reviewMessage"
-                class="review-textarea"
-                maxlength="280"
-                placeholder="Exemple : Très bon goût, design premium et effet frais vraiment cool."
-                required
-              ></textarea>
-
-              <button type="submit" class="btn btn-primary">Publier mon avis</button>
-            </form>
-          </div>
-
-          <div class="reviews-list-card">
-            <div class="reviews-list-top">
-              <h3>Avis récents</h3>
-              <button id="clearReviewsBtn" class="btn btn-secondary clear-reviews-btn" type="button">Effacer les avis</button>
-            </div>
-            <div id="reviewsList" class="reviews-list"></div>
-          </div>
-        </div>
-      </section>
     </section>
 
     <section class="hero-right">
@@ -357,6 +281,76 @@
           </div>
           <button class="btn btn-secondary vote-btn">Voter</button>
         </article>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup avis -->
+  <div id="reviewsModal" class="modal hidden">
+    <div class="modal-overlay" id="closeReviewsOverlay"></div>
+    <div class="modal-content modal-reviews">
+      <button id="closeReviewsBtn" class="modal-close">✕</button>
+
+      <p class="modal-kicker">Avis clients</p>
+      <h2>Avis sur GL1TCH</h2>
+      <p class="reviews-popup-intro">
+        Donne ton avis sur GL1TCH et attribue une note de 1 à 5 étoiles.
+      </p>
+
+      <div class="reviews-popup-layout">
+        <div class="review-form-card">
+          <h3>Écrire un avis</h3>
+
+          <form id="reviewForm" class="review-form">
+            <label class="review-label" for="reviewName">Nom</label>
+            <input
+              id="reviewName"
+              class="review-input"
+              type="text"
+              maxlength="40"
+              placeholder="Exemple : Alex"
+              required
+            />
+
+            <label class="review-label">Ta note</label>
+            <div class="review-rating-picker" id="reviewRatingPicker" aria-label="Choisir une note">
+              <button type="button" class="rating-star active" data-rating="1">★</button>
+              <button type="button" class="rating-star active" data-rating="2">★</button>
+              <button type="button" class="rating-star active" data-rating="3">★</button>
+              <button type="button" class="rating-star active" data-rating="4">★</button>
+              <button type="button" class="rating-star active" data-rating="5">★</button>
+            </div>
+            <p class="review-rating-text" id="reviewRatingText">5 étoiles / 5</p>
+
+            <label class="review-label" for="reviewMessage">Ton avis</label>
+            <textarea
+              id="reviewMessage"
+              class="review-textarea"
+              maxlength="280"
+              placeholder="Exemple : Très bon goût, design premium et effet frais vraiment cool."
+              required
+            ></textarea>
+
+            <button type="submit" class="btn btn-primary">Publier mon avis</button>
+          </form>
+        </div>
+
+        <div class="reviews-list-card">
+          <div class="reviews-list-top">
+            <div>
+              <h3>Avis récents</h3>
+              <p class="reviews-summary-line">
+                <span id="reviewsAverageNumber">0,0</span> / 5 —
+                <span id="reviewsCount">0 avis</span>
+              </p>
+            </div>
+            <button id="clearReviewsBtn" class="btn btn-secondary clear-reviews-btn" type="button">
+              Effacer les avis
+            </button>
+          </div>
+
+          <div id="reviewsList" class="reviews-list"></div>
+        </div>
       </div>
     </div>
   </div>

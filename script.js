@@ -80,26 +80,7 @@ const defaultVoteResults = {
   "forest-lime": 16
 };
 
-const defaultReviews = [
-  {
-    name: "Lina",
-    rating: 5,
-    message: "Le goût est super propre et le design de la canette est vraiment incroyable.",
-    date: "2026-03-10T14:20:00"
-  },
-  {
-    name: "Noah",
-    rating: 4,
-    message: "Très frais, très stylé. J’aime surtout l’ambiance gaming et le côté premium.",
-    date: "2026-03-11T18:40:00"
-  },
-  {
-    name: "Emma",
-    rating: 5,
-    message: "Le concept est fort, la boisson donne envie et le mode nature est franchement réussi.",
-    date: "2026-03-12T09:15:00"
-  }
-];
+const defaultReviews = [];
 
 let cart = [];
 let selectedStoreId = stores[0].id;
@@ -151,6 +132,11 @@ const closeVoteOverlay = document.getElementById("closeVoteOverlay");
 const voteGrid = document.getElementById("voteGrid");
 const voteMessage = document.getElementById("voteMessage");
 
+const openReviewsBtn = document.getElementById("openReviewsBtn");
+const reviewsModal = document.getElementById("reviewsModal");
+const closeReviewsBtn = document.getElementById("closeReviewsBtn");
+const closeReviewsOverlay = document.getElementById("closeReviewsOverlay");
+
 const reviewForm = document.getElementById("reviewForm");
 const reviewName = document.getElementById("reviewName");
 const reviewMessageInput = document.getElementById("reviewMessage");
@@ -158,7 +144,6 @@ const reviewRatingPicker = document.getElementById("reviewRatingPicker");
 const reviewRatingText = document.getElementById("reviewRatingText");
 const reviewsList = document.getElementById("reviewsList");
 const reviewsAverageNumber = document.getElementById("reviewsAverageNumber");
-const reviewsAverageDrinks = document.getElementById("reviewsAverageDrinks");
 const reviewsCount = document.getElementById("reviewsCount");
 const clearReviewsBtn = document.getElementById("clearReviewsBtn");
 
@@ -205,7 +190,8 @@ function anyModalOpen() {
   return !detailsModal.classList.contains("hidden") ||
     !healthModal.classList.contains("hidden") ||
     !storeModal.classList.contains("hidden") ||
-    !voteModal.classList.contains("hidden");
+    !voteModal.classList.contains("hidden") ||
+    !reviewsModal.classList.contains("hidden");
 }
 
 function updateBodyLock() {
@@ -253,6 +239,16 @@ function openVoteModal() {
 
 function closeVoteModal() {
   voteModal.classList.add("hidden");
+  updateBodyLock();
+}
+
+function openReviewsModal() {
+  reviewsModal.classList.remove("hidden");
+  updateBodyLock();
+}
+
+function closeReviewsModal() {
+  reviewsModal.classList.add("hidden");
   updateBodyLock();
 }
 
@@ -633,9 +629,9 @@ function loadReviews() {
 
   try {
     const parsed = JSON.parse(savedReviews);
+
     if (!Array.isArray(parsed)) {
-      localStorage.setItem(reviewsStorageKey, JSON.stringify(defaultReviews));
-      return [...defaultReviews];
+      return [];
     }
 
     return parsed.map((review) => ({
@@ -645,8 +641,7 @@ function loadReviews() {
       date: review.date || new Date().toISOString()
     }));
   } catch (error) {
-    localStorage.setItem(reviewsStorageKey, JSON.stringify(defaultReviews));
-    return [...defaultReviews];
+    return [];
   }
 }
 
@@ -677,11 +672,11 @@ function formatReviewDate(dateString) {
   });
 }
 
-function renderDrinkRating(rating, large = false) {
-  let html = `<div class="drink-rating${large ? " large" : ""}" aria-label="${rating} boissons sur 5">`;
+function renderStarRating(rating) {
+  let html = `<div class="star-rating" aria-label="${rating} étoiles sur 5">`;
 
   for (let i = 1; i <= 5; i += 1) {
-    html += `<span class="drink-icon ${i <= rating ? "active" : ""}">🥤</span>`;
+    html += `<span class="star-icon ${i <= rating ? "active" : ""}">★</span>`;
   }
 
   html += `</div>`;
@@ -689,19 +684,18 @@ function renderDrinkRating(rating, large = false) {
 }
 
 function updateRatingPickerVisual() {
-  const buttons = Array.from(reviewRatingPicker.querySelectorAll(".rating-drink"));
+  const buttons = Array.from(reviewRatingPicker.querySelectorAll(".rating-star"));
 
   buttons.forEach((button) => {
     const ratingValue = Number(button.dataset.rating);
     button.classList.toggle("active", ratingValue <= currentReviewRating);
-    button.classList.toggle("inactive", ratingValue > currentReviewRating);
   });
 
-  reviewRatingText.textContent = `${currentReviewRating} boisson${currentReviewRating > 1 ? "s" : ""} / 5`;
+  reviewRatingText.textContent = `${currentReviewRating} étoile${currentReviewRating > 1 ? "s" : ""} / 5`;
 }
 
 function bindRatingPicker() {
-  const buttons = Array.from(reviewRatingPicker.querySelectorAll(".rating-drink"));
+  const buttons = Array.from(reviewRatingPicker.querySelectorAll(".rating-star"));
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -719,12 +713,10 @@ function getAverageRating() {
 
 function renderReviewsSummary() {
   const average = getAverageRating();
-  const roundedAverage = reviews.length === 0 ? 0 : Math.round(average);
   const displayAverage = reviews.length === 0 ? "0,0" : average.toFixed(1).replace(".", ",");
 
   reviewsAverageNumber.textContent = displayAverage;
-  reviewsAverageDrinks.innerHTML = renderDrinkRating(roundedAverage, true);
-  reviewsCount.textContent = `Basé sur ${reviews.length} avis`;
+  reviewsCount.textContent = `${reviews.length} avis`;
 }
 
 function renderReviewsList() {
@@ -741,7 +733,7 @@ function renderReviewsList() {
             <div class="review-author">${escapeHtml(review.name)}</div>
             <div class="review-date">${formatReviewDate(review.date)}</div>
           </div>
-          ${renderDrinkRating(review.rating)}
+          ${renderStarRating(review.rating)}
         </div>
         <p class="review-message">${escapeHtml(review.message)}</p>
       </article>
@@ -808,6 +800,10 @@ openVoteBtn.addEventListener("click", openVoteModal);
 closeVoteBtn.addEventListener("click", closeVoteModal);
 closeVoteOverlay.addEventListener("click", closeVoteModal);
 
+openReviewsBtn.addEventListener("click", openReviewsModal);
+closeReviewsBtn.addEventListener("click", closeReviewsModal);
+closeReviewsOverlay.addEventListener("click", closeReviewsModal);
+
 citySearch.addEventListener("input", (event) => {
   renderStores(event.target.value);
 });
@@ -835,6 +831,7 @@ document.addEventListener("keydown", (event) => {
     closeHealthModal();
     closeStoreModal();
     closeVoteModal();
+    closeReviewsModal();
     closeCart();
   }
 });
