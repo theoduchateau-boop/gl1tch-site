@@ -71,6 +71,7 @@ const themeContent = {
 
 const voteStorageKey = "gl1tch-vote-results";
 const voteUserChoiceKey = "gl1tch-user-vote";
+const reviewsStorageKey = "gl1tch-reviews";
 
 const defaultVoteResults = {
   "neon-berry": 18,
@@ -79,11 +80,34 @@ const defaultVoteResults = {
   "forest-lime": 16
 };
 
+const defaultReviews = [
+  {
+    name: "Lina",
+    rating: 5,
+    message: "Le goût est super propre et le design de la canette est vraiment incroyable.",
+    date: "2026-03-10T14:20:00"
+  },
+  {
+    name: "Noah",
+    rating: 4,
+    message: "Très frais, très stylé. J’aime surtout l’ambiance gaming et le côté premium.",
+    date: "2026-03-11T18:40:00"
+  },
+  {
+    name: "Emma",
+    rating: 5,
+    message: "Le concept est fort, la boisson donne envie et le mode nature est franchement réussi.",
+    date: "2026-03-12T09:15:00"
+  }
+];
+
 let cart = [];
 let selectedStoreId = stores[0].id;
 let currentTheme = localStorage.getItem("gl1tch-theme") || "gaming";
 let voteResults = loadVoteResults();
 let userVote = localStorage.getItem(voteUserChoiceKey);
+let currentReviewRating = 5;
+let reviews = loadReviews();
 
 const themeToggle = document.getElementById("themeToggle");
 const heroThemeImage = document.getElementById("heroThemeImage");
@@ -126,6 +150,17 @@ const closeVoteBtn = document.getElementById("closeVoteBtn");
 const closeVoteOverlay = document.getElementById("closeVoteOverlay");
 const voteGrid = document.getElementById("voteGrid");
 const voteMessage = document.getElementById("voteMessage");
+
+const reviewForm = document.getElementById("reviewForm");
+const reviewName = document.getElementById("reviewName");
+const reviewMessageInput = document.getElementById("reviewMessage");
+const reviewRatingPicker = document.getElementById("reviewRatingPicker");
+const reviewRatingText = document.getElementById("reviewRatingText");
+const reviewsList = document.getElementById("reviewsList");
+const reviewsAverageNumber = document.getElementById("reviewsAverageNumber");
+const reviewsAverageDrinks = document.getElementById("reviewsAverageDrinks");
+const reviewsCount = document.getElementById("reviewsCount");
+const clearReviewsBtn = document.getElementById("clearReviewsBtn");
 
 const cartToggle = document.getElementById("cartToggle");
 const closeCartBtn = document.getElementById("closeCartBtn");
@@ -587,6 +622,170 @@ function bindVoteButtons() {
   });
 }
 
+/* Reviews system */
+function loadReviews() {
+  const savedReviews = localStorage.getItem(reviewsStorageKey);
+
+  if (!savedReviews) {
+    localStorage.setItem(reviewsStorageKey, JSON.stringify(defaultReviews));
+    return [...defaultReviews];
+  }
+
+  try {
+    const parsed = JSON.parse(savedReviews);
+    if (!Array.isArray(parsed)) {
+      localStorage.setItem(reviewsStorageKey, JSON.stringify(defaultReviews));
+      return [...defaultReviews];
+    }
+
+    return parsed.map((review) => ({
+      name: String(review.name || "Client").slice(0, 40),
+      rating: Math.min(5, Math.max(1, Number(review.rating) || 5)),
+      message: String(review.message || "").slice(0, 280),
+      date: review.date || new Date().toISOString()
+    }));
+  } catch (error) {
+    localStorage.setItem(reviewsStorageKey, JSON.stringify(defaultReviews));
+    return [...defaultReviews];
+  }
+}
+
+function saveReviews() {
+  localStorage.setItem(reviewsStorageKey, JSON.stringify(reviews));
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatReviewDate(dateString) {
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Avis récent";
+  }
+
+  return date.toLocaleDateString("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
+}
+
+function renderDrinkRating(rating, large = false) {
+  let html = `<div class="drink-rating${large ? " large" : ""}" aria-label="${rating} boissons sur 5">`;
+
+  for (let i = 1; i <= 5; i += 1) {
+    html += `<span class="drink-icon ${i <= rating ? "active" : ""}">🥤</span>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function updateRatingPickerVisual() {
+  const buttons = Array.from(reviewRatingPicker.querySelectorAll(".rating-drink"));
+
+  buttons.forEach((button) => {
+    const ratingValue = Number(button.dataset.rating);
+    button.classList.toggle("active", ratingValue <= currentReviewRating);
+    button.classList.toggle("inactive", ratingValue > currentReviewRating);
+  });
+
+  reviewRatingText.textContent = `${currentReviewRating} boisson${currentReviewRating > 1 ? "s" : ""} / 5`;
+}
+
+function bindRatingPicker() {
+  const buttons = Array.from(reviewRatingPicker.querySelectorAll(".rating-drink"));
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      currentReviewRating = Number(button.dataset.rating);
+      updateRatingPickerVisual();
+    });
+  });
+}
+
+function getAverageRating() {
+  if (reviews.length === 0) return 0;
+  const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+  return total / reviews.length;
+}
+
+function renderReviewsSummary() {
+  const average = getAverageRating();
+  const roundedAverage = reviews.length === 0 ? 0 : Math.round(average);
+  const displayAverage = reviews.length === 0 ? "0,0" : average.toFixed(1).replace(".", ",");
+
+  reviewsAverageNumber.textContent = displayAverage;
+  reviewsAverageDrinks.innerHTML = renderDrinkRating(roundedAverage, true);
+  reviewsCount.textContent = `Basé sur ${reviews.length} avis`;
+}
+
+function renderReviewsList() {
+  if (reviews.length === 0) {
+    reviewsList.innerHTML = `<p class="review-empty">Aucun avis pour le moment. Sois le premier à donner ton avis sur GL1TCH.</p>`;
+    return;
+  }
+
+  reviewsList.innerHTML = reviews.map((review) => {
+    return `
+      <article class="review-card">
+        <div class="review-card-top">
+          <div>
+            <div class="review-author">${escapeHtml(review.name)}</div>
+            <div class="review-date">${formatReviewDate(review.date)}</div>
+          </div>
+          ${renderDrinkRating(review.rating)}
+        </div>
+        <p class="review-message">${escapeHtml(review.message)}</p>
+      </article>
+    `;
+  }).join("");
+}
+
+function renderReviews() {
+  renderReviewsSummary();
+  renderReviewsList();
+}
+
+function submitReview(event) {
+  event.preventDefault();
+
+  const name = reviewName.value.trim();
+  const message = reviewMessageInput.value.trim();
+
+  if (!name || !message) {
+    return;
+  }
+
+  const newReview = {
+    name: name.slice(0, 40),
+    rating: currentReviewRating,
+    message: message.slice(0, 280),
+    date: new Date().toISOString()
+  };
+
+  reviews.unshift(newReview);
+  saveReviews();
+  renderReviews();
+
+  reviewForm.reset();
+  currentReviewRating = 5;
+  updateRatingPickerVisual();
+}
+
+function clearReviews() {
+  reviews = [];
+  saveReviews();
+  renderReviews();
+}
+
 themeToggle.addEventListener("click", toggleTheme);
 
 dyslexicToggle.addEventListener("click", () => {
@@ -627,6 +826,9 @@ cartToggle.addEventListener("click", openCart);
 closeCartBtn.addEventListener("click", closeCart);
 cartBackdrop.addEventListener("click", closeCart);
 
+reviewForm.addEventListener("submit", submitReview);
+clearReviewsBtn.addEventListener("click", clearReviews);
+
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     closeModal();
@@ -647,3 +849,6 @@ renderCart();
 renderStores();
 bindVoteButtons();
 renderVoteResults();
+bindRatingPicker();
+updateRatingPickerVisual();
+renderReviews();
